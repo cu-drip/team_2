@@ -13,9 +13,9 @@ public interface CompetitionRepository extends Repository<Competition, Long> {
     @Modifying
     @Query(value = "INSERT INTO competition (iduser, idcompetition, text, rating) VALUES (:iduser, :idcompetition, :text, :rating)", nativeQuery = true)
     void addCompetition(@Param("iduser") long iduser,
-                 @Param("idcompetition") long idcompetition,
-                 @Param("text") String text,
-                 @Param("rating") int rating);
+                        @Param("idcompetition") long idcompetition,
+                        @Param("text") String text,
+                        @Param("rating") int rating);
 
     @Query(value = "SELECT * FROM competition WHERE idcompetition = :idcompetition", nativeQuery = true)
     List<Competition> findByCompetitionId(@Param("idcompetition") long idcompetition);
