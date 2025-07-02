@@ -1,7 +1,6 @@
-on: [ push ]
+on: [ push, pull_request ]
 jobs:
   action:
-    branches: [ main ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
