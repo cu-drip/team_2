@@ -1,25 +1,17 @@
 package drip.competition.feedback.repository;
 
 import drip.competition.feedback.entities.Competition;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface CompetitionRepository extends Repository<Competition, Long> {
+@Repository
+public interface CompetitionRepository extends JpaRepository<Competition, UUID> {
 
-    @Modifying
-    @Query(value = "INSERT INTO competition (iduser, idcompetition, text, rating) VALUES (:iduser, :idcompetition, :text, :rating)", nativeQuery = true)
-    void addCompetition(@Param("iduser") long iduser,
-                        @Param("idcompetition") long idcompetition,
-                        @Param("text") String text,
-                        @Param("rating") int rating);
+    List<Competition> findByIdcompetition(UUID idcompetition);
 
-    @Query(value = "SELECT * FROM competition WHERE idcompetition = :idcompetition", nativeQuery = true)
-    List<Competition> findByCompetitionId(@Param("idcompetition") long idcompetition);
+    List<Competition> findByIduser(UUID iduser);
 
-    @Query(value = "SELECT * FROM competition WHERE iduser = :iduser", nativeQuery = true)
-    List<Competition> findByUserId(@Param("iduser") long iduser);
 }

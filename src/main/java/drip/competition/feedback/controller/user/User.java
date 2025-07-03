@@ -1,6 +1,5 @@
 package drip.competition.feedback.controller.user;
 
-
 import drip.competition.feedback.entities.Competition;
 import drip.competition.feedback.entities.Game;
 import drip.competition.feedback.repository.CompetitionRepository;
@@ -9,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -24,33 +24,23 @@ public class User {
 
     @PostMapping("/add/game")
     @Transactional
-    public void addGame(@RequestParam long iduser,
-                        @RequestParam long idgame,
-                        @RequestParam int rating,
-
-                        @RequestBody String text
-    ) {
-        gameRepository.addGame(iduser, idgame, text, rating);
+    public Game addGame(@RequestBody Game game) {
+        return gameRepository.save(game);
     }
 
     @PostMapping("/add/competition")
     @Transactional
-    public void addCompetition(@RequestParam long iduser,
-                               @RequestParam long idcompetition,
-                               @RequestParam int rating,
-
-                               @RequestBody String text
-    ) {
-        competitionRepository.addCompetition(iduser, idcompetition, text, rating);
+    public Competition addCompetition(@RequestBody Competition competition) {
+        return competitionRepository.save(competition);
     }
 
     @GetMapping("/game")
-    public List<Game> getAllGame(@RequestParam long idgame) {
-        return gameRepository.findByGameId(idgame);
+    public List<Game> getAllGame(@RequestParam UUID idgame) {
+        return gameRepository.findByIdgame(idgame);
     }
 
     @GetMapping("/competition")
-    public List<Competition> getAllCompetition(@RequestParam long idcompetition) {
-        return competitionRepository.findByCompetitionId(idcompetition);
+    public List<Competition> getAllCompetition(@RequestParam UUID idcompetition) {
+        return competitionRepository.findByIdcompetition(idcompetition);
     }
 }
