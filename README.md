@@ -24,7 +24,7 @@ iduser: UUID
 idgame: UUID
 text: string
 rating: int
-
+-created_at: timestamp
 ```
 
 ### `CompetitionFeedback`
