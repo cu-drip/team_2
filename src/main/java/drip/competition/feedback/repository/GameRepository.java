@@ -1,25 +1,17 @@
 package drip.competition.feedback.repository;
 
 import drip.competition.feedback.entities.Game;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface GameRepository extends Repository<Game, Long> {
+@Repository
+public interface GameRepository extends JpaRepository<Game, UUID> {
 
-    @Modifying
-    @Query(value = "INSERT INTO game (iduser, idgame, text, rating) VALUES (:iduser, :idgame, :text, :rating)", nativeQuery = true)
-    void addGame(@Param("iduser") long iduser,
-                 @Param("idgame") long idgame,
-                 @Param("text") String text,
-                 @Param("rating") int rating);
+    List<Game> findByIdgame(UUID idgame);
 
-    @Query(value = "SELECT * FROM game WHERE idgame = :idgame", nativeQuery = true)
-    List<Game> findByGameId(@Param("idgame") long idgame);
+    List<Game> findByIduser(UUID iduser);
 
-    @Query(value = "SELECT * FROM game WHERE iduser = :iduser", nativeQuery = true)
-    List<Game> findByUserId(@Param("iduser") long iduser);
 }
