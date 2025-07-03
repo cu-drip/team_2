@@ -29,6 +29,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.testcontainers:postgresql:1.20.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
