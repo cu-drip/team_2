@@ -23,3 +23,13 @@ jobs:
         with:
           name: Package
           path: build/libs
+
+      -   name: Install SSH key
+          #if: github.ref == 'refs/heads/main'
+          uses: shimataro/ssh-key-action@v2
+          with:
+              key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      -   name: Deploy to VPS
+          #if: github.ref == 'refs/heads/main'
+          run: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'bash ~/deploy.sh'
