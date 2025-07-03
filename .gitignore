@@ -66,3 +66,4 @@ gradle-app.setting
 .gradletasknamecache
 
 HELP.md
+.env
