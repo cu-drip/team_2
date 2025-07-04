@@ -12,6 +12,20 @@ services:
             - "${POSTGRES_PORT}:5432"
         volumes:
             - db-data:/var/lib/postgresql/data
+        networks:
+            - backend
+
+    feedback:
+        image: spring/feedback:latest
+        restart: always
+        ports:
+            - "8080:8080"
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: bridge
 
 volumes:
     db-data:
