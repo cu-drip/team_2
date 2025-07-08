@@ -32,7 +32,6 @@ public class AdminController {
     public List<Object> getByUser(@RequestParam UUID iduser) {
         List<Game> games = gameRepository.findByIduser(iduser);
         List<Competition> competitions = competitionRepository.findByIduser(iduser);
-
         List<Object> result = new ArrayList<>();
         result.addAll(games);
         result.addAll(competitions);
