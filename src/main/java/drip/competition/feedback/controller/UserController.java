@@ -33,7 +33,7 @@ public class UserController {
     @Transactional
     public ResponseEntity<Void> createMatch(@RequestBody Match match, UriComponentsBuilder builder) {
         Match saved = matchRepository.save(match);
-        URI location = builder.path("/api/v1/feedback/matches/{id}").buildAndExpand(saved.getId()).toUri();
+        URI location = builder.path("/api/v1/feedback/matches?matchId={id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(location).build(); // 201 Created
     }
 
@@ -41,7 +41,7 @@ public class UserController {
     @Transactional
     public ResponseEntity<Void> createTournament(@RequestBody Tournament tournament, UriComponentsBuilder builder) {
         Tournament saved = tournamentRepository.save(tournament);
-        URI location = builder.path("/api/v1/feedback/tournaments/{id}").buildAndExpand(saved.getId()).toUri();
+        URI location = builder.path("/api/v1/feedback/tournaments?tournamentId={id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(location).build(); // 201 Created
     }
 
