@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
@@ -16,13 +19,18 @@ import java.util.List;
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
-    private String secret;
+    private String secretFile;
 
     private Key key;
 
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        try {
+            byte[] secretBytes = Files.readAllBytes(Path.of(secretFile));
+            this.key = Keys.hmacShaKeyFor(secretBytes);
+        } catch (IOException e) {
+            throw new RuntimeException("Не удалось прочитать секретный ключ для JWT", e);
+        }
     }
 
     public Claims getAllClaimsFromToken(String token) {
