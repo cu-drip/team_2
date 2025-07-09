@@ -6,7 +6,7 @@ info:
         FeedbackService — микросервис для приема и хранения отзывов пользователей о соревнованиях и играх.
 
 servers:
-    -   url: http://localhost:8000
+    - url: http://localhost:8000
 
 paths:
     /user/add/match:
@@ -46,12 +46,12 @@ paths:
             summary: Получить отзывы по match_id
             tags: [ User ]
             parameters:
-                -   name: matchId
-                    in: query
-                    required: true
-                    schema:
-                        type: string
-                        format: uuid
+                - name: matchId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
             responses:
                 '200':
                     description: Список отзывов
@@ -69,12 +69,12 @@ paths:
             summary: Получить отзывы по tournament_id
             tags: [ User ]
             parameters:
-                -   name: tournamentId
-                    in: query
-                    required: true
-                    schema:
-                        type: string
-                        format: uuid
+                - name: tournamentId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
             responses:
                 '200':
                     description: Список отзывов
@@ -92,12 +92,12 @@ paths:
             summary: Получить все отзывы пользователя (игры + соревнования)
             tags: [ Admin ]
             parameters:
-                -   name: userId
-                    in: query
-                    required: true
-                    schema:
-                        type: string
-                        format: uuid
+                - name: userId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
             responses:
                 '200':
                     description: Список отзывов пользователя
