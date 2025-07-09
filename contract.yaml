@@ -6,10 +6,32 @@ info:
         FeedbackService — микросервис для приема и хранения отзывов пользователей о соревнованиях и играх.
 
 servers:
-    - url: http://localhost:8000
+    -   url: http://localhost:8000
 
 paths:
-    /user/add/match:
+    /api/v1/feedback/matches:
+        get:
+            summary: Получить отзывы по match_id
+            tags: [ User ]
+            parameters:
+                -   name: matchId
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                        format: uuid
+            responses:
+                '200':
+                    description: Список отзывов
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/MatchFeedback'
+                '404':
+                    description: Отзывы не найдены
+
         post:
             summary: Добавить отзыв о конкретной игре
             tags: [ User ]
@@ -25,7 +47,29 @@ paths:
                 '400':
                     description: Ошибка запроса
 
-    /user/add/tournament:
+    /api/v1/feedback/tournaments:
+        get:
+            summary: Получить отзывы по tournament_id
+            tags: [ User ]
+            parameters:
+                -   name: tournamentId
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                        format: uuid
+            responses:
+                '200':
+                    description: Список отзывов
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/TournamentFeedback'
+                '404':
+                    description: Отзывы не найдены
+
         post:
             summary: Добавить отзыв о конкретном соревновании
             tags: [ User ]
@@ -41,63 +85,40 @@ paths:
                 '400':
                     description: Ошибка запроса
 
-    /user/match:
+    /api/v1/admin/users/{id}/matches:
         get:
-            summary: Получить отзывы по match_id
-            tags: [ User ]
-            parameters:
-                - name: matchId
-                  in: query
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-            responses:
-                '200':
-                    description: Список отзывов
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/MatchFeedback'
-                '404':
-                    description: Отзывы не найдены
-
-    /user/tournament:
-        get:
-            summary: Получить отзывы по tournament_id
-            tags: [ User ]
-            parameters:
-                - name: tournamentId
-                  in: query
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-            responses:
-                '200':
-                    description: Список отзывов
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/TournamentFeedback'
-                '404':
-                    description: Отзывы не найдены
-
-    /admin/user:
-        get:
-            summary: Получить все отзывы пользователя (игры + соревнования)
+            summary: Получить все отзывы пользователя (матчи)
             tags: [ Admin ]
             parameters:
-                - name: userId
-                  in: query
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
+                -   name: userId
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                        format: uuid
+            responses:
+                '200':
+                    description: Список отзывов пользователя
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/UnifiedFeedback'
+                '404':
+                    description: Отзывы не найдены
+
+    /api/v1/admin/users/{id}/tournaments:
+        get:
+            summary: Получить все отзывы пользователя (турниры)
+            tags: [ Admin ]
+            parameters:
+                -   name: userId
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                        format: uuid
             responses:
                 '200':
                     description: Список отзывов пользователя
