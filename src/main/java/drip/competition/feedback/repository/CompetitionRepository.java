@@ -1,17 +1,13 @@
 package drip.competition.feedback.repository;
 
 import drip.competition.feedback.entities.Competition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
-@Repository
 public interface CompetitionRepository extends JpaRepository<Competition, UUID> {
-
-    List<Competition> findByIdcompetition(UUID idcompetition);
-
-    List<Competition> findByIduser(UUID iduser);
-
+    Page<Competition> findByIduser(UUID iduser, Pageable pageable);
+    Page<Competition> findByIdcompetition(UUID idcompetition, Pageable pageable);
 }
