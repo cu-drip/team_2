@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-public class Game {
+public class Tournament {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -24,10 +24,10 @@ public class Game {
     private UUID id;
 
     @Column
-    private UUID iduser;
+    private UUID userId;
 
     @Column
-    private UUID idgame;
+    private UUID tournamentId;
 
     @Column
     private String text;
@@ -36,6 +36,6 @@ public class Game {
     private Integer rating;
 
     @CreationTimestamp
-    @Column(name = "created_at", updatable = true, nullable = false)
+    @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 }

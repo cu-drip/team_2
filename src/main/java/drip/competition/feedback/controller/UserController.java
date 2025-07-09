@@ -1,9 +1,9 @@
 package drip.competition.feedback.controller;
 
-import drip.competition.feedback.entities.Competition;
-import drip.competition.feedback.entities.Game;
-import drip.competition.feedback.repository.CompetitionRepository;
-import drip.competition.feedback.repository.GameRepository;
+import drip.competition.feedback.entities.Tournament;
+import drip.competition.feedback.entities.Match;
+import drip.competition.feedback.repository.TournamentRepository;
+import drip.competition.feedback.repository.MatchRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,38 +20,38 @@ import java.util.UUID;
 @PreAuthorize("isAuthenticated()")
 public class UserController {
 
-    private final GameRepository gameRepository;
-    private final CompetitionRepository competitionRepository;
+    private final MatchRepository matchRepository;
+    private final TournamentRepository tournamentRepository;
 
-    public UserController(GameRepository gameRepository,
-                          CompetitionRepository competitionRepository) {
-        this.gameRepository = gameRepository;
-        this.competitionRepository = competitionRepository;
+    public UserController(MatchRepository matchRepository,
+                          TournamentRepository tournamentRepository) {
+        this.matchRepository = matchRepository;
+        this.tournamentRepository = tournamentRepository;
     }
 
     @PostMapping("/matches")
     @Transactional
-    public ResponseEntity<Void> createMatch(@RequestBody Game game, UriComponentsBuilder builder) {
-        Game saved = gameRepository.save(game);
+    public ResponseEntity<Void> createMatch(@RequestBody Match match, UriComponentsBuilder builder) {
+        Match saved = matchRepository.save(match);
         URI location = builder.path("/api/v1/feedback/matches/{id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(location).build(); // 201 Created
     }
 
     @PostMapping("/tournaments")
     @Transactional
-    public ResponseEntity<Void> createTournament(@RequestBody Competition competition, UriComponentsBuilder builder) {
-        Competition saved = competitionRepository.save(competition);
+    public ResponseEntity<Void> createTournament(@RequestBody Tournament tournament, UriComponentsBuilder builder) {
+        Tournament saved = tournamentRepository.save(tournament);
         URI location = builder.path("/api/v1/feedback/tournaments/{id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(location).build(); // 201 Created
     }
 
     @GetMapping("/matches")
-    public Page<Game> getMatches(@RequestParam UUID idgame, Pageable pageable) {
-        return gameRepository.findByIdgame(idgame, pageable);
+    public Page<Match> getMatches(@RequestParam UUID matchId, Pageable pageable) {
+        return matchRepository.findByMatchId(matchId, pageable);
     }
 
     @GetMapping("/tournaments")
-    public Page<Competition> getTournaments(@RequestParam UUID idcompetition, Pageable pageable) {
-        return competitionRepository.findByIdcompetition(idcompetition, pageable);
+    public Page<Tournament> getTournaments(@RequestParam UUID tournamentId, Pageable pageable) {
+        return tournamentRepository.findByTournamentId(tournamentId, pageable);
     }
 }
