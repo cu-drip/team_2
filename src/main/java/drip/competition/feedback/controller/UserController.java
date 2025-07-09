@@ -1,9 +1,10 @@
-package drip.competition.feedback.controller.user;
+package drip.competition.feedback.controller;
 
 import drip.competition.feedback.entities.Competition;
 import drip.competition.feedback.entities.Game;
 import drip.competition.feedback.repository.CompetitionRepository;
 import drip.competition.feedback.repository.GameRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +13,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
-public class User {
+@PreAuthorize("isAuthenticated()")
+public class UserController {
 
     private final GameRepository gameRepository;
     private final CompetitionRepository competitionRepository;
 
-    public User(GameRepository gameRepository, CompetitionRepository competitionRepository) {
+    public UserController(GameRepository gameRepository,
+                          CompetitionRepository competitionRepository) {
         this.gameRepository = gameRepository;
         this.competitionRepository = competitionRepository;
     }
