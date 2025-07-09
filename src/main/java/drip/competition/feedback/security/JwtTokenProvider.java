@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -17,17 +18,12 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
-    private long expiration;
-
     private Key key;
 
     @PostConstruct
     public void init() {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
-
-
 
     public Claims getAllClaimsFromToken(String token) {
         return Jwts.parserBuilder()
@@ -45,7 +41,7 @@ public class JwtTokenProvider {
         return !isTokenExpired(token);
     }
 
-    public String getRoleFromToken(String token) {
-        return getAllClaimsFromToken(token).get("role", String.class);
+    public List<String> getRolesFromToken(String token) {
+        return (List<String>) getAllClaimsFromToken(token).get("roles");
     }
 }

@@ -1,0 +1,49 @@
+secrets:
+    jwt_secret:
+        file: ../secrets/jwt_secret.key
+
+services:
+    feedbackdb:
+        image: postgres:16-alpine
+        container_name: feedback-postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: database
+            POSTGRES_USER: myuser
+            POSTGRES_PASSWORD: secret
+        ports:
+            - "5432:5432"
+        volumes:
+            - feedback_data:/var/lib/postgresql/data
+        networks:
+            - feedback-network
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U myuser -d database" ]
+            interval: 10s
+            retries: 5
+
+    feedback-service:
+        build: .
+        container_name: feedback-service
+        restart: on-failure
+        depends_on:
+            feedbackdb:
+                condition: service_healthy
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://feedbackdb:5432/database
+            SPRING_DATASOURCE_USERNAME: myuser
+            SPRING_DATASOURCE_PASSWORD: secret
+            JWT_SECRET_PATH: /run/secrets/jwt_secret
+        ports:
+            - "8080:8080"
+        networks:
+            - feedback-network
+        secrets:
+            - jwt_secret
+
+volumes:
+    feedback_data:
+
+networks:
+    feedback-network:
+        driver: bridge

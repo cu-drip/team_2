@@ -26,22 +26,21 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+    ) throws IOException {
         try {
             String token = resolveToken(request);
 
             if (token != null && jwtTokenProvider.validateToken(token)) {
-                String role = jwtTokenProvider.getRoleFromToken(token);
+                List<String> roles = jwtTokenProvider.getRolesFromToken(token);
+                boolean isAdmin = roles.contains("ROLE_ADMIN");
 
-                if (request.getRequestURI().startsWith("/admin") && !"ADMIN".equals(role)) {
+                if (request.getRequestURI().startsWith("/admin") && !isAdmin) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
                     return;
                 }
 
-                List<SimpleGrantedAuthority> authorities =
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role));
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken("user", null, authorities);
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(isAdmin ? "ADMIN" : "USER"));
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("user", null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
 
