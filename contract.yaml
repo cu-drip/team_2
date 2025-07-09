@@ -1,0 +1,215 @@
+openapi: 3.0.4
+info:
+    title: FeedbackService
+    version: 1.0.0
+    description: |
+        FeedbackService — микросервис для приема и хранения отзывов пользователей о соревнованиях и играх.
+
+servers:
+    - url: http://localhost:8000
+
+paths:
+    /user/add/match:
+        post:
+            summary: Добавить отзыв о конкретной игре
+            tags: [ User ]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MatchFeedbackCreate'
+            responses:
+                '201':
+                    description: Отзыв успешно добавлен
+                '400':
+                    description: Ошибка запроса
+
+    /user/add/tournament:
+        post:
+            summary: Добавить отзыв о конкретном соревновании
+            tags: [ User ]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TournamentFeedbackCreate'
+            responses:
+                '201':
+                    description: Отзыв успешно добавлен
+                '400':
+                    description: Ошибка запроса
+
+    /user/match:
+        get:
+            summary: Получить отзывы по match_id
+            tags: [ User ]
+            parameters:
+                - name: matchId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+            responses:
+                '200':
+                    description: Список отзывов
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/MatchFeedback'
+                '404':
+                    description: Отзывы не найдены
+
+    /user/tournament:
+        get:
+            summary: Получить отзывы по tournament_id
+            tags: [ User ]
+            parameters:
+                - name: tournamentId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+            responses:
+                '200':
+                    description: Список отзывов
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/TournamentFeedback'
+                '404':
+                    description: Отзывы не найдены
+
+    /admin/user:
+        get:
+            summary: Получить все отзывы пользователя (игры + соревнования)
+            tags: [ Admin ]
+            parameters:
+                - name: userId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+            responses:
+                '200':
+                    description: Список отзывов пользователя
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/UnifiedFeedback'
+                '404':
+                    description: Отзывы не найдены
+
+components:
+    schemas:
+        MatchFeedbackCreate:
+            type: object
+            required: [ user_id, match_id, text, rating ]
+            properties:
+                user_id:
+                    type: string
+                    format: uuid
+                match_id:
+                    type: string
+                    format: uuid
+                text:
+                    type: string
+                rating:
+                    type: integer
+                    minimum: 1
+                    maximum: 5
+
+        TournamentFeedbackCreate:
+            type: object
+            required: [ user_id, tournament_id, text, rating ]
+            properties:
+                user_id:
+                    type: string
+                    format: uuid
+                tournament_id:
+                    type: string
+                    format: uuid
+                text:
+                    type: string
+                rating:
+                    type: integer
+                    minimum: 1
+                    maximum: 5
+
+        MatchFeedback:
+            type: object
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                user_id:
+                    type: string
+                    format: uuid
+                match_id:
+                    type: string
+                    format: uuid
+                text:
+                    type: string
+                rating:
+                    type: integer
+                created_at:
+                    type: string
+                    format: date-time
+
+        TournamentFeedback:
+            type: object
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                user_id:
+                    type: string
+                    format: uuid
+                tournament_id:
+                    type: string
+                    format: uuid
+                text:
+                    type: string
+                rating:
+                    type: integer
+                created_at:
+                    type: string
+                    format: date-time
+
+        UnifiedFeedback:
+            type: object
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                user_id:
+                    type: string
+                    format: uuid
+                text:
+                    type: string
+                rating:
+                    type: integer
+                created_at:
+                    type: string
+                    format: date-time
+                type:
+                    type: string
+                    enum: [ match, tournament ]
+                match_id:
+                    type: string
+                    format: uuid
+                    nullable: true
+                tournament_id:
+                    type: string
+                    format: uuid
+                    nullable: true
