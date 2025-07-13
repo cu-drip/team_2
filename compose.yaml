@@ -16,15 +16,15 @@ services:
         volumes:
             - feedback_data:/var/lib/postgresql/data
         networks:
-            - feedback-network
+          - microservices-net
         healthcheck:
             test: [ "CMD-SHELL", "pg_isready -U myuser -d database" ]
             interval: 10s
             retries: 5
 
-    feedback-service:
+    feedbackservice:
         build: .
-        container_name: feedback-service
+        container_name: feedbackservice
         restart: on-failure
         depends_on:
             feedbackdb:
@@ -37,7 +37,7 @@ services:
         ports:
             - "8080:8080"
         networks:
-            - feedback-network
+          - microservices-net
         secrets:
             - jwt_secret
 
@@ -45,5 +45,5 @@ volumes:
     feedback_data:
 
 networks:
-    feedback-network:
-        driver: bridge
+  microservices-net:
+    external: true
