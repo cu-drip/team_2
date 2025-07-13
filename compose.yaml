@@ -35,7 +35,7 @@ services:
             SPRING_DATASOURCE_PASSWORD: secret
             JWT_SECRET_PATH: /run/secrets/jwt_secret
         ports:
-            - "8080:8080"
+            - "8084:8080"
         networks:
           - microservices-net
         secrets:
